@@ -1,0 +1,22 @@
+spring:
+  # DB source config
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/city_service
+    username: postgres
+    password: postgres
+  # JPA config
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Liquibase migration config
+  liquibase:
+    change-log: db/changelog/root.changelog.xml
+    url: jdbc:postgresql://localhost:5432/city_service
+    user: postgres
+    password: postgres
