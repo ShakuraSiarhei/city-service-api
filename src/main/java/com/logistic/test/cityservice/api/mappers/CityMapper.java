@@ -16,5 +16,6 @@ public interface CityMapper {
   List<CityResponse> toCityResponseList(List<City> entities);
 
   @Mapping(target = "name", source = "newName")
+  @Mapping(target = "photo", source = "newPhoto")
   City updateEntity(CityRequest cityRequest, @MappingTarget City city);
 }
