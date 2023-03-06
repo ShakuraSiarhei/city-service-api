@@ -1,6 +1,7 @@
 package com.logistic.test.cityservice.api.controllers.impl;
 
 import com.logistic.test.cityservice.api.controllers.CityController;
+import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
@@ -10,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +32,11 @@ public class CityControllerImpl implements CityController {
   }
 
   @Override
-  @GetMapping("/{cityName}")
-  public CityResponse getByName(
-      @PathVariable String cityName) {
-    return cityService.getByName(cityName);
+  @GetMapping("/search")
+  public PageResponse<CityResponse> searhCityByName(
+      @PageableDefault Pageable pageable,
+      @RequestBody @Valid CityCriteria criteria) {
+    return cityService.searchCityByName(pageable, criteria);
   }
 
   @Override

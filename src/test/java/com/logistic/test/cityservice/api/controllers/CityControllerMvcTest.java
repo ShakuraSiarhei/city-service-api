@@ -1,8 +1,6 @@
 package com.logistic.test.cityservice.api.controllers;
 
-import static com.logistic.test.cityservice.api.TestDataUtil.getCity;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityRequest;
-import static com.logistic.test.cityservice.api.TestDataUtil.getCityResponse;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageRequest;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageResponse;
 import static org.hamcrest.Matchers.is;
@@ -36,29 +34,6 @@ class CityControllerMvcTest extends AbstractMvcTest {
     //WHEN
     mockMvc.perform(get(CITY_ENDPOINT))
         .andExpect(status().isOk());
-  }
-
-  @Test
-  void shouldSuccessGetCityByName() throws Exception {
-    //GIVEN
-    when(cityService.getByName(getCity().getName())).thenReturn(getCityResponse());
-
-    //WHEN
-    mockMvc.perform(get(CITY_ENDPOINT.concat("/").concat(getCity().getName())))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id", is(getCity().getId().intValue())))
-        .andExpect(jsonPath("$.name", is(getCity().getName())))
-        .andExpect(jsonPath("$.photo", is(getCity().getPhoto())));
-  }
-
-  @Test
-  void shouldFailWhenCityNotFound() throws Exception {
-    //GIVEN
-    when(cityService.getByName(getCity().getName())).thenThrow(NotFoundException.class);
-
-    //WHEN
-    mockMvc.perform(get(CITY_ENDPOINT.concat("/").concat(getCity().getName())))
-        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -102,7 +77,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
   private static Stream<Arguments> testValidateParams() {
     return Stream.of(
         Arguments.of(TestDataUtil.getCityRequestWithNullName(),
-            "You can not update a city with a null name"),
+            "Id can not be null"),
         Arguments.of(TestDataUtil.getCityRequestWithNullNewName(),
             "City name can not be null or empty"),
         Arguments.of(TestDataUtil.getCityRequestWithEmptyNewName(),

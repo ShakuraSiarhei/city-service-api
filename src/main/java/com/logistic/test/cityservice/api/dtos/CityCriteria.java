@@ -1,25 +1,18 @@
 package com.logistic.test.cityservice.api.dtos;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CityRequest {
+public class CityCriteria {
 
-  @NotNull(message = "Id can not be null")
-  Long id;
-  @NotEmpty(message = "City name can not be null or empty")
-  String newName;
-  //@Pattern() TODO: add pattern to URL
-  String newPhoto;
+  @NotNull(message = "Search value can not be null.")
+  String searchValue;
 }

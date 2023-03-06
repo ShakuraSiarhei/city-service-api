@@ -49,7 +49,7 @@ public class TestDataUtil {
 
   public static CityRequest getCityRequest() {
     return CityRequest.builder()
-        .currentName(CITY_NAME)
+        .id(ID)
         .newName(NEW_CITY_NAME)
         .newPhoto(NEW_CITY_PHOTO_URL)
         .build();
@@ -57,7 +57,7 @@ public class TestDataUtil {
 
   public static CityRequest getCityRequestWithNullName() {
     return CityRequest.builder()
-        .currentName(null)
+        .id(null)
         .newName(NEW_CITY_NAME)
         .newPhoto(NEW_CITY_PHOTO_URL)
         .build();
@@ -65,7 +65,7 @@ public class TestDataUtil {
 
   public static CityRequest getCityRequestWithEmptyNewName() {
     return CityRequest.builder()
-        .currentName(CITY_NAME)
+        .id(ID)
         .newName("")
         .newPhoto(NEW_CITY_PHOTO_URL)
         .build();
@@ -73,7 +73,7 @@ public class TestDataUtil {
 
   public static CityRequest getCityRequestWithNullNewName() {
     return CityRequest.builder()
-        .currentName(CITY_NAME)
+        .id(ID)
         .newName(null)
         .newPhoto(NEW_CITY_PHOTO_URL)
         .build();

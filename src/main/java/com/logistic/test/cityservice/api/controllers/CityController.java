@@ -1,5 +1,6 @@
 package com.logistic.test.cityservice.api.controllers;
 
+import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.ExceptionResponse;
@@ -21,21 +22,18 @@ public interface CityController {
   PageResponse<CityResponse> getAllCities(Pageable pageable);
 
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Get city by name",
+      @ApiResponse(responseCode = "200", description = "Get all cities with pagination",
           content = @Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = CityResponse.class)))),
-      @ApiResponse(responseCode = "404", description = "City named % not found",
-          content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))),
-
+              array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
   })
-  CityResponse getByName(String cityName);
+  PageResponse<CityResponse> searhCityByName(Pageable pageable, CityCriteria criteria);
 
 
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Update city by name",
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = CityResponse.class)))),
-      @ApiResponse(responseCode = "400", description = "You can not update a city with a null name | City name can not be empty",
+      @ApiResponse(responseCode = "400", description = "Id can not be null | City name can not be empty",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))),
       @ApiResponse(responseCode = "404", description = "City named % not found",
           content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))

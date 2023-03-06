@@ -1,5 +1,6 @@
 package com.logistic.test.cityservice.api.services.impl;
 
+import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
@@ -8,10 +9,12 @@ import com.logistic.test.cityservice.api.exceptions.NotFoundException;
 import com.logistic.test.cityservice.api.mappers.CityMapper;
 import com.logistic.test.cityservice.api.repositories.CityRepository;
 import com.logistic.test.cityservice.api.services.CityService;
+import com.logistic.test.cityservice.api.util.CitySpecification;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ public class CityServiceImpl implements CityService {
   @Transactional(readOnly = true)
   public PageResponse<CityResponse> getAllCities(Pageable pageable) {
     Page<City> cities = cityRepository.findAll(pageable);
+
     List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
 
     return PageResponse.<CityResponse>builder()
@@ -37,22 +41,29 @@ public class CityServiceImpl implements CityService {
   }
 
   @Override
-  public CityResponse getByName(String cityName) {
-    City city = getCityByName(cityName);
-    return cityMapper.toCityResponse(city);
-  }
-
-  @Override
   @Transactional
   public void updateCity(CityRequest cityRequest) {
-    City city = getCityByName(cityRequest.getCurrentName());
+    City city = cityRepository.findById(cityRequest.getId()).orElseThrow(
+        () -> new NotFoundException(
+            String.format("City with id #%s not found.", cityRequest.getId())));
     City cityToSave = cityMapper.updateEntity(cityRequest, city);
 
     cityRepository.save(cityToSave);
   }
 
-  private City getCityByName(String name) {
-    return cityRepository.getCityByName(name).orElseThrow(
-        () -> new NotFoundException(String.format("City named %s not found.", name)));
+  @Override
+  public PageResponse<CityResponse> searchCityByName(Pageable pageable, CityCriteria criteria) {
+    Specification<City> specification = CitySpecification.getSpecification(
+        criteria.getSearchValue());
+
+    Page<City> cities = cityRepository.findAll(specification, pageable);
+    List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
+
+    return PageResponse.<CityResponse>builder()
+        .content(citiesResponse)
+        .total(cities.getTotalElements())
+        .pages(cities.getTotalPages())
+        .size(cities.getSize())
+        .build();
   }
 }
