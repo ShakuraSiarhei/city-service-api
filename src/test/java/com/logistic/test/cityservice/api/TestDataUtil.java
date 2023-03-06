@@ -1,5 +1,6 @@
 package com.logistic.test.cityservice.api;
 
+import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
@@ -15,7 +16,8 @@ public class TestDataUtil {
   private final String CITY_NAME = "Test City Name";
   private final String CITY_PHOTO = "Test city photo url";
   private final String NEW_CITY_NAME = "New test city name";
-  private final String NEW_CITY_PHOTO_URL = "New city photo URL";
+  private final String NEW_CITY_PHOTO_URL = "https://upload.wikimedia.org/newurl";
+  private final String INVALID_CITY_PHOTO_URL = "newurl";
   private final Integer PAGE = 15;
   private final Integer SIZE = 2;
 
@@ -44,6 +46,18 @@ public class TestDataUtil {
         .pages(PAGE)
         .size(SIZE)
         .content(List.of(getCityResponse()))
+        .build();
+  }
+
+  public static CityCriteria getCityCriteria() {
+    return CityCriteria.builder()
+        .searchValue(CITY_NAME)
+        .build();
+  }
+
+  public static CityCriteria getCityCriteriaWithNullValue() {
+    return CityCriteria.builder()
+        .searchValue(null)
         .build();
   }
 
@@ -76,6 +90,14 @@ public class TestDataUtil {
         .id(ID)
         .newName(null)
         .newPhoto(NEW_CITY_PHOTO_URL)
+        .build();
+  }
+
+  public static CityRequest getCityRequestWithInvalidUrl() {
+    return CityRequest.builder()
+        .id(ID)
+        .newName(NEW_CITY_NAME)
+        .newPhoto(INVALID_CITY_PHOTO_URL)
         .build();
   }
 }

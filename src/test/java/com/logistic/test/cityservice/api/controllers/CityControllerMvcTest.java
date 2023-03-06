@@ -1,5 +1,7 @@
 package com.logistic.test.cityservice.api.controllers;
 
+import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteria;
+import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteriaWithNullValue;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityRequest;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageRequest;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageResponse;
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 class CityControllerMvcTest extends AbstractMvcTest {
 
   private final String CITY_ENDPOINT = "/cities";
+  private final String SEARCH_ENDPOINT = "/search";
 
   @Test
   void shouldSuccessGetAllCities() throws Exception {
@@ -34,6 +37,32 @@ class CityControllerMvcTest extends AbstractMvcTest {
     //WHEN
     mockMvc.perform(get(CITY_ENDPOINT))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  void shouldSuccessGetAllCitiesByName() throws Exception {
+    //GIVEN
+    when(cityService.searchCityByName(getPageRequest(), getCityCriteria())).thenReturn(
+        getPageResponse());
+
+    //WHEN
+    mockMvc.perform(get(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(getCityCriteria())))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void shouldFailGetAllCitiesByNameWithInvalidCriteria() throws Exception {
+    //GIVEN
+    String expectedMessage = "Search value can not be null.";
+
+    //WHEN
+    mockMvc.perform(get(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(getCityCriteriaWithNullValue())))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message", is(expectedMessage)));
   }
 
   @Test
@@ -81,7 +110,9 @@ class CityControllerMvcTest extends AbstractMvcTest {
         Arguments.of(TestDataUtil.getCityRequestWithNullNewName(),
             "City name can not be null or empty"),
         Arguments.of(TestDataUtil.getCityRequestWithEmptyNewName(),
-            "City name can not be null or empty")
+            "City name can not be null or empty"),
+        Arguments.of(TestDataUtil.getCityRequestWithInvalidUrl(),
+            "Invalid photo URL provided")
     );
   }
 }

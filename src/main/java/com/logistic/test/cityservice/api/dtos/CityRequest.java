@@ -2,6 +2,7 @@ package com.logistic.test.cityservice.api.dtos;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,6 @@ public class CityRequest {
   Long id;
   @NotEmpty(message = "City name can not be null or empty")
   String newName;
-  //@Pattern() TODO: add pattern to URL
+  @Pattern(regexp = "^https://upload.wikimedia.org/.*$", message = "Invalid photo URL provided")
   String newPhoto;
 }
