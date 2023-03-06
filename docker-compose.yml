@@ -2,21 +2,19 @@ version: '3'
 
 services:
   city-service:
-    image: city-service:latest
-    build:
-      context: .
+    build: .
+    restart: always
+    links:
+      - postgres
     ports:
       - '8080:8080'
-    depends_on:
-      - postgres
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/city_service
-      - SPRING_PROFILES_ACTIVE=local
   postgres:
     image: postgres:14.5
+    restart: always
     ports:
       - '5432:5432'
     environment:
+      - POSTGRES_HOST=postgres:5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=city_service
