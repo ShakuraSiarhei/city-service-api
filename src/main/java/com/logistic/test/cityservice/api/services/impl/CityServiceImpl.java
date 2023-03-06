@@ -12,7 +12,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +53,6 @@ public class CityServiceImpl implements CityService {
 
   private City getCityByName(String name) {
     return cityRepository.getCityByName(name).orElseThrow(
-        () -> new NotFoundException(String.format("City named %s not found.", name),
-            HttpStatus.NOT_FOUND));
+        () -> new NotFoundException(String.format("City named %s not found.", name)));
   }
 }

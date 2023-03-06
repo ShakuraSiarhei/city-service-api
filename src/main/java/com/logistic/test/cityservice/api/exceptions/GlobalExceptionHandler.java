@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException exception) {
 
     return ResponseEntity
-        .status(exception.getStatus())
+        .status(HttpStatus.NOT_FOUND)
         .body(ExceptionResponse.builder()
             .message(exception.getMessage())
             .build());

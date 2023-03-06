@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 public class CityRequest {
   @NotNull(message = "You can not update a city with a null name")
   String currentName;
-  @NotEmpty(message = "City name can not be empty")
+  @NotEmpty(message = "City name can not be null or empty")
   String newName;
-  String photo;
+  String newPhoto;
 }
