@@ -1,7 +1,6 @@
 package com.logistic.test.cityservice.api.controllers;
 
-import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteria;
-import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteriaWithNullValue;
+import static com.logistic.test.cityservice.api.TestDataUtil.getCityName;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityRequest;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPage;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageResponse;
@@ -11,7 +10,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,27 +42,13 @@ class CityControllerMvcTest extends AbstractMvcTest {
   @Test
   void shouldSuccessGetAllCitiesByName() throws Exception {
     //GIVEN
-    when(cityService.searchCityByName(getPage(), getSize(), getCityCriteria())).thenReturn(
+    when(cityService.searchCityByName(getPage(), getSize(), getCityName())).thenReturn(
         getPageResponse());
 
     //WHEN
-    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(getCityCriteria())))
+    mockMvc.perform(get(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
+            .queryParam("cityName", getCityName()))
         .andExpect(status().isOk());
-  }
-
-  @Test
-  void shouldFailGetAllCitiesByNameWithInvalidCriteria() throws Exception {
-    //GIVEN
-    String expectedMessage = "Search value can not be null.";
-
-    //WHEN
-    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(getCityCriteriaWithNullValue())))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.message", is(expectedMessage)));
   }
 
   @Test

@@ -14,7 +14,5 @@ Setting up
 
 1) Clone city-service-api
 
-* Install dependencies
-  mvn install
 * Run docker-compose file
   docker-compose up

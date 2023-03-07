@@ -1,6 +1,5 @@
 package com.logistic.test.cityservice.api.services.impl;
 
-import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
@@ -26,9 +25,8 @@ public class CityServiceImpl implements CityService {
   private final CityMapper cityMapper;
 
   @Override
-  @Transactional(readOnly = true)
   public PageResponse<CityResponse> getAllCities(Integer page, Integer size) {
-    PageRequest pageable = getPageRequest(page, size);
+    PageRequest pageable = createPageRequest(page, size);
     Page<City> cities = cityRepository.findAll(pageable);
 
     List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
@@ -54,10 +52,9 @@ public class CityServiceImpl implements CityService {
 
   @Override
   public PageResponse<CityResponse> searchCityByName(Integer page, Integer size,
-      CityCriteria criteria) {
-    Specification<City> specification = CitySpecification.getSpecification(
-        criteria.getSearchValue());
-    PageRequest pageable = getPageRequest(page, size);
+      String cityName) {
+    Specification<City> specification = CitySpecification.getSpecification(cityName);
+    PageRequest pageable = createPageRequest(page, size);
 
     Page<City> cities = cityRepository.findAll(specification, pageable);
     List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
@@ -70,7 +67,7 @@ public class CityServiceImpl implements CityService {
         .build();
   }
 
-  private PageRequest getPageRequest(Integer page, Integer size) {
+  private PageRequest createPageRequest(Integer page, Integer size) {
     return PageRequest.of(page, size);
   }
 }
