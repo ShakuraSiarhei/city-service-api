@@ -1,6 +1,5 @@
 package com.logistic.test.cityservice.api.controllers;
 
-import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.ExceptionResponse;
@@ -18,15 +17,7 @@ public interface CityController {
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
   })
-  PageResponse<CityResponse> getAllCities(Integer page, Integer size);
-
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Search by city name with pagination",
-          content = @Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
-  })
-  PageResponse<CityResponse> searchCityByName(Integer page, Integer size, CityCriteria criteria);
-
+  PageResponse<CityResponse> getAllCities(Integer page, Integer size, String cityName);
 
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Update city by name",

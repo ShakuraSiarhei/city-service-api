@@ -1,7 +1,6 @@
 package com.logistic.test.cityservice.api.controllers;
 
-import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteria;
-import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteriaWithNullValue;
+import static com.logistic.test.cityservice.api.TestDataUtil.getCityName;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityRequest;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPage;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageResponse;
@@ -11,15 +10,14 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.logistic.test.cityservice.api.TestDataUtil;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
-import com.logistic.test.cityservice.api.exceptions.NotFoundException;
 import java.util.stream.Stream;
+import javax.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,12 +27,11 @@ import org.springframework.http.MediaType;
 class CityControllerMvcTest extends AbstractMvcTest {
 
   private final String CITY_ENDPOINT = "/cities";
-  private final String SEARCH_ENDPOINT = "/search";
 
   @Test
   void shouldSuccessGetAllCities() throws Exception {
     //GIVEN
-    when(cityService.getAllCities(getPage(), getSize())).thenReturn(getPageResponse());
+    when(cityService.getCities(getPage(), getSize(), null)).thenReturn(getPageResponse());
 
     //WHEN
     mockMvc.perform(get(CITY_ENDPOINT))
@@ -42,29 +39,14 @@ class CityControllerMvcTest extends AbstractMvcTest {
   }
 
   @Test
-  void shouldSuccessGetAllCitiesByName() throws Exception {
+  void shouldSuccessGetCitiesByName() throws Exception {
     //GIVEN
-    when(cityService.searchCityByName(getPage(), getSize(), getCityCriteria())).thenReturn(
-        getPageResponse());
+    when(cityService.getCities(getPage(), getSize(), getCityName())).thenReturn(getPageResponse());
 
     //WHEN
-    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(getCityCriteria())))
+    mockMvc.perform(get(CITY_ENDPOINT)
+            .queryParam("cityName", getCityName()))
         .andExpect(status().isOk());
-  }
-
-  @Test
-  void shouldFailGetAllCitiesByNameWithInvalidCriteria() throws Exception {
-    //GIVEN
-    String expectedMessage = "Search value can not be null.";
-
-    //WHEN
-    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(getCityCriteriaWithNullValue())))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.message", is(expectedMessage)));
   }
 
   @Test
@@ -82,7 +64,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
   @Test
   void shouldFailUpdateWhenCityNotFound() throws Exception {
     //GIVEN
-    doThrow(NotFoundException.class).when(cityService).updateCity(getCityRequest());
+    doThrow(EntityNotFoundException.class).when(cityService).updateCity(getCityRequest());
 
     //WHEN
     mockMvc.perform(put(CITY_ENDPOINT)
