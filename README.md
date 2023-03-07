@@ -18,9 +18,3 @@ Setting up
   mvn install
 * Run docker-compose file
   docker-compose up
-
-2) Local DB connection
-
-* Set profile - local * url: dbc:postgresql://localhost:5432/city_service
-  user: postgres
-  password: postgres
