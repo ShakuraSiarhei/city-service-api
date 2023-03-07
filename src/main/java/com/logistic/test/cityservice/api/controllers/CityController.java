@@ -22,11 +22,11 @@ public interface CityController {
   PageResponse<CityResponse> getAllCities(Pageable pageable);
 
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Get all cities with pagination",
+      @ApiResponse(responseCode = "200", description = "Search by city name with pagination",
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
   })
-  PageResponse<CityResponse> searhCityByName(Pageable pageable, CityCriteria criteria);
+  PageResponse<CityResponse> searchCityByName(Pageable pageable, CityCriteria criteria);
 
 
   @ApiResponses(value = {

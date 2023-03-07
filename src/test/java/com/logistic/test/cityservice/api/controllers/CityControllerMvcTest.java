@@ -10,6 +10,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +47,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
         getPageResponse());
 
     //WHEN
-    mockMvc.perform(get(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
+    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
             .contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(getCityCriteria())))
         .andExpect(status().isOk());
@@ -58,7 +59,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
     String expectedMessage = "Search value can not be null.";
 
     //WHEN
-    mockMvc.perform(get(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
+    mockMvc.perform(post(CITY_ENDPOINT.concat(SEARCH_ENDPOINT))
             .contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(getCityCriteriaWithNullValue())))
         .andExpect(status().isBadRequest())

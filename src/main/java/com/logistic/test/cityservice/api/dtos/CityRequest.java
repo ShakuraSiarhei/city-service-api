@@ -21,6 +21,6 @@ public class CityRequest {
   Long id;
   @NotEmpty(message = "City name can not be null or empty")
   String newName;
-  @Pattern(regexp = "^https://upload.wikimedia.org/.*$", message = "Invalid photo URL provided")
+  @Pattern(regexp = "^(https|http).*$", message = "Invalid photo URL provided")
   String newPhoto;
 }
