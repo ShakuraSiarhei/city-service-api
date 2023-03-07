@@ -1,5 +1,6 @@
 package com.logistic.test.cityservice.api;
 
+import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
@@ -51,8 +52,16 @@ public class TestDataUtil {
         .build();
   }
 
-  public static String getCityName() {
-    return CITY_NAME;
+  public static CityCriteria getCityCriteria() {
+    return CityCriteria.builder()
+        .searchValue(CITY_NAME)
+        .build();
+  }
+
+  public static CityCriteria getCityCriteriaWithNullValue() {
+    return CityCriteria.builder()
+        .searchValue(null)
+        .build();
   }
 
   public static CityRequest getCityRequest() {
