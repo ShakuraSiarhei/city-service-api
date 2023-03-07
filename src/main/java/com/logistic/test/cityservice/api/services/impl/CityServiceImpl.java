@@ -4,12 +4,12 @@ import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
 import com.logistic.test.cityservice.api.entities.City;
-import com.logistic.test.cityservice.api.exceptions.NotFoundException;
 import com.logistic.test.cityservice.api.mappers.CityMapper;
 import com.logistic.test.cityservice.api.repositories.CityRepository;
 import com.logistic.test.cityservice.api.services.CityService;
 import com.logistic.test.cityservice.api.util.CitySpecification;
 import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ public class CityServiceImpl implements CityService {
   @Transactional
   public void updateCity(CityRequest cityRequest) {
     City city = cityRepository.findById(cityRequest.getId()).orElseThrow(
-        () -> new NotFoundException(
+        () -> new EntityNotFoundException(
             String.format("City with id #%s not found.", cityRequest.getId())));
     City cityToSave = cityMapper.updateEntity(cityRequest, city);
 

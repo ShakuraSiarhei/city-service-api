@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.logistic.test.cityservice.api.TestDataUtil;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
-import com.logistic.test.cityservice.api.exceptions.NotFoundException;
 import java.util.stream.Stream;
+import javax.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -66,7 +66,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
   @Test
   void shouldFailUpdateWhenCityNotFound() throws Exception {
     //GIVEN
-    doThrow(NotFoundException.class).when(cityService).updateCity(getCityRequest());
+    doThrow(EntityNotFoundException.class).when(cityService).updateCity(getCityRequest());
 
     //WHEN
     mockMvc.perform(put(CITY_ENDPOINT)
