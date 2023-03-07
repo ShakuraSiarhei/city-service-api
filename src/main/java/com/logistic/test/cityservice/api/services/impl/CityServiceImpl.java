@@ -13,7 +13,9 @@ import com.logistic.test.cityservice.api.util.CitySpecification;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,8 @@ public class CityServiceImpl implements CityService {
 
   @Override
   @Transactional(readOnly = true)
-  public PageResponse<CityResponse> getAllCities(Pageable pageable) {
+  public PageResponse<CityResponse> getAllCities(Integer page, Integer size) {
+    PageRequest pageable = getPageRequest(page, size);
     Page<City> cities = cityRepository.findAll(pageable);
 
     List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
@@ -52,9 +55,11 @@ public class CityServiceImpl implements CityService {
   }
 
   @Override
-  public PageResponse<CityResponse> searchCityByName(Pageable pageable, CityCriteria criteria) {
+  public PageResponse<CityResponse> searchCityByName(Integer page, Integer size,
+      CityCriteria criteria) {
     Specification<City> specification = CitySpecification.getSpecification(
         criteria.getSearchValue());
+    PageRequest pageable = getPageRequest(page, size);
 
     Page<City> cities = cityRepository.findAll(specification, pageable);
     List<CityResponse> citiesResponse = cityMapper.toCityResponseList(cities.getContent());
@@ -65,5 +70,9 @@ public class CityServiceImpl implements CityService {
         .pages(cities.getTotalPages())
         .size(cities.getSize())
         .build();
+  }
+
+  private PageRequest getPageRequest(Integer page, Integer size) {
+    return PageRequest.of(page, size, Sort.by(Direction.DESC, "createdAt"));
   }
 }

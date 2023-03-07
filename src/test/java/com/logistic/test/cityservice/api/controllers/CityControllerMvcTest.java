@@ -3,8 +3,9 @@ package com.logistic.test.cityservice.api.controllers;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteria;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityCriteriaWithNullValue;
 import static com.logistic.test.cityservice.api.TestDataUtil.getCityRequest;
-import static com.logistic.test.cityservice.api.TestDataUtil.getPageRequest;
+import static com.logistic.test.cityservice.api.TestDataUtil.getPage;
 import static com.logistic.test.cityservice.api.TestDataUtil.getPageResponse;
+import static com.logistic.test.cityservice.api.TestDataUtil.getSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -33,7 +34,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
   @Test
   void shouldSuccessGetAllCities() throws Exception {
     //GIVEN
-    when(cityService.getAllCities(getPageRequest())).thenReturn(getPageResponse());
+    when(cityService.getAllCities(getPage(), getSize())).thenReturn(getPageResponse());
 
     //WHEN
     mockMvc.perform(get(CITY_ENDPOINT))
@@ -43,7 +44,7 @@ class CityControllerMvcTest extends AbstractMvcTest {
   @Test
   void shouldSuccessGetAllCitiesByName() throws Exception {
     //GIVEN
-    when(cityService.searchCityByName(getPageRequest(), getCityCriteria())).thenReturn(
+    when(cityService.searchCityByName(getPage(), getSize(), getCityCriteria())).thenReturn(
         getPageResponse());
 
     //WHEN

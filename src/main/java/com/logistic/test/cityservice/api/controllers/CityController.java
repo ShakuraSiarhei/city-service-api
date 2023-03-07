@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.data.domain.Pageable;
 
 public interface CityController {
 
@@ -19,14 +18,14 @@ public interface CityController {
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
   })
-  PageResponse<CityResponse> getAllCities(Pageable pageable);
+  PageResponse<CityResponse> getAllCities(Integer page, Integer size);
 
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search by city name with pagination",
           content = @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = CityResponse.class))))
   })
-  PageResponse<CityResponse> searchCityByName(Pageable pageable, CityCriteria criteria);
+  PageResponse<CityResponse> searchCityByName(Integer page, Integer size, CityCriteria criteria);
 
 
   @ApiResponses(value = {

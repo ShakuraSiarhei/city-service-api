@@ -7,7 +7,6 @@ import com.logistic.test.cityservice.api.dtos.PageResponse;
 import com.logistic.test.cityservice.api.entities.City;
 import java.util.List;
 import lombok.experimental.UtilityClass;
-import org.springframework.data.domain.PageRequest;
 
 @UtilityClass
 public class TestDataUtil {
@@ -37,8 +36,12 @@ public class TestDataUtil {
         .build();
   }
 
-  public static PageRequest getPageRequest() {
-    return PageRequest.of(PAGE, SIZE);
+  public static Integer getPage() {
+    return PAGE;
+  }
+
+  public static Integer getSize() {
+    return SIZE;
   }
 
   public static PageResponse<CityResponse> getPageResponse() {

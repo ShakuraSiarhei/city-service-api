@@ -4,13 +4,12 @@ import com.logistic.test.cityservice.api.dtos.CityCriteria;
 import com.logistic.test.cityservice.api.dtos.CityRequest;
 import com.logistic.test.cityservice.api.dtos.CityResponse;
 import com.logistic.test.cityservice.api.dtos.PageResponse;
-import org.springframework.data.domain.Pageable;
 
 public interface CityService {
 
-  PageResponse<CityResponse> getAllCities(Pageable pageable);
+  PageResponse<CityResponse> getAllCities(Integer page, Integer size);
 
   void updateCity(CityRequest cityRequest);
 
-  PageResponse<CityResponse> searchCityByName(Pageable pageable, CityCriteria criteria);
+  PageResponse<CityResponse> searchCityByName(Integer page, Integer size, CityCriteria criteria);
 }

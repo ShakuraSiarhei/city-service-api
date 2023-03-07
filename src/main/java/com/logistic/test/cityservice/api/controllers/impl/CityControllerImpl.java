@@ -8,13 +8,12 @@ import com.logistic.test.cityservice.api.dtos.PageResponse;
 import com.logistic.test.cityservice.api.services.CityService;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,17 +26,19 @@ public class CityControllerImpl implements CityController {
   @Override
   @GetMapping
   public PageResponse<CityResponse> getAllCities(
-      @PageableDefault Pageable pageable
+      @RequestParam(defaultValue = "0") final Integer page,
+      @RequestParam(defaultValue = "10") final Integer size
   ) {
-    return cityService.getAllCities(pageable);
+    return cityService.getAllCities(page, size);
   }
 
   @Override
   @PostMapping("/search")
   public PageResponse<CityResponse> searchCityByName(
-      @PageableDefault Pageable pageable,
+      @RequestParam(defaultValue = "0") final Integer page,
+      @RequestParam(defaultValue = "10") final Integer size,
       @RequestBody @Valid CityCriteria criteria) {
-    return cityService.searchCityByName(pageable, criteria);
+    return cityService.searchCityByName(page, size, criteria);
   }
 
   @Override
